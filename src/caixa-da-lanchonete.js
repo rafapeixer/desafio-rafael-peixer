@@ -61,9 +61,9 @@ class CaixaDaLanchonete {
       }
   
       if (metodoDePagamento === "dinheiro") {
-        valorTotal *= 0.95; // Aplicar desconto de 5% em dinheiro
+        valorTotal *= 0.95;
       } else if (metodoDePagamento === "credito") {
-        valorTotal *= 1.03; // Aplicar acréscimo de 3% no crédito
+        valorTotal *= 1.03;
       }
   
       return `R$ ${valorTotal.toFixed(2).replace(".", ",")}`;
