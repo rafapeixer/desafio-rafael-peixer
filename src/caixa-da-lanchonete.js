@@ -25,27 +25,35 @@ class CaixaDaLanchonete {
   
       let valorTotal = 0;
   
+      let itensPrincipais = new Set();
+  
       for (const itemStr of itens) {
         const [itemCodigo, quantidade] = itemStr.split(",");
         const quantidadeInt = parseInt(quantidade);
-  
-        if (isNaN(quantidadeInt) || quantidadeInt <= 0) {
-          return "Quantidade inválida!";
-        }
-  
+
+        if (typeof quantidade === "string" && quantidade.trim() === "0") {
+            return "Quantidade inválida!";
+          }
+          
         const menuItem = this.cardapio.find((menu) => menu.codigo === itemCodigo);
   
         if (!menuItem) {
           return "Item inválido!";
         }
   
-        if (menuItem.descricao.includes("extra")) {
-          const itemPrincipal = this.cardapio.find(
-            (menu) => menu.codigo === itemCodigo.replace("extra", "extra")
-          );
+        if (!menuItem.descricao.includes("extra")) {
+          itensPrincipais.add(menuItem.codigo);
+        } else {
+          const extrasPrincipais = {
+            queijo: "sanduiche",
+            chantily: "cafe",
+          };
   
-          if (!itens.includes(`${itemPrincipal.codigo},${quantidade}`)) {
-            return "Item extra não pode ser pedido sem o principal";
+          if (Object.keys(extrasPrincipais).includes(itemCodigo)) {
+            const itemPrincipalCodigo = extrasPrincipais[itemCodigo];
+            if (!itensPrincipais.has(itemPrincipalCodigo)) {
+              return "Item extra não pode ser pedido sem o principal";
+            }
           }
         }
   
@@ -61,6 +69,6 @@ class CaixaDaLanchonete {
       return `R$ ${valorTotal.toFixed(2).replace(".", ",")}`;
     }
   }
-  
+
   export { CaixaDaLanchonete };
   
